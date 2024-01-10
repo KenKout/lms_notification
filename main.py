@@ -9,7 +9,7 @@ from flask import Flask
 from threading import Thread
 
 Debug = False
-replit = os.getenv('replit')
+#replit = os.getenv('replit')
 webhook_url = os.getenv('WEBHOOK')
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
@@ -209,6 +209,10 @@ s = requests.session()
 login_sso()
 sess_key = crawl_e_learning_link()
 crawl_data_courses(sess_key)
+while True:
+        recheck_data(sess_key)
+        time.sleep(1800)    # Recheck every 30 minutes
+'''
 if not replit:
     while True:
         recheck_data(sess_key)
@@ -232,3 +236,4 @@ else:
     while True:
         recheck_data(sess_key)
         time.sleep(1800)    # Recheck every 30 minutes
+'''
