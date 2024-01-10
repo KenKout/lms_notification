@@ -19,11 +19,11 @@ Before running the script, make sure you have the following:
 
 ## Setup on Replit
 
-1. Fork this Github on Replit [repository](https://github.com/KenKout/lms_notification/main).
+1. Fork this on Replit [repository](https://replit.com/@kenhcmut/lmsnotification).
    
 2. Set up environment variables:
 
-   - Click on the **Lock icon** on the left sidebar.
+   - Click on the **Lock icon(Secrets)** on the left sidebar.
    - Click on **Environment Variables**.
    - Add the following variables:
      - `WEBHOOK`: Discord webhook URL for notifications.
