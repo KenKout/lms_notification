@@ -175,5 +175,20 @@ s = requests.session()
 login_sso()
 sess_key = crawl_e_learning_link()
 crawl_data_courses(sess_key)
-while True:
-  recheck_data(sess_key)
+if not replit:
+    while True:
+      recheck_data(sess_key)
+else:
+    from flask import Flask
+    app = Flask('')
+    @app.route('/')
+    def main():
+        return "alive"
+    def run():
+        app.run(host="0.0.0.0", port=8080)
+    def keep_alive():
+        server = Thread(target=run)
+        server.start()
+    keep_alive()
+    while True:
+      recheck_data(sess_key)
