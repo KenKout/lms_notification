@@ -7,6 +7,7 @@ import random
 import os
 
 Debug = False
+replit = os.getenv('WEBHOOK')
 webhook_url = os.getenv('WEBHOOK')
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
