@@ -9,7 +9,7 @@ from flask import Flask
 from threading import Thread
 
 Debug = False
-replit = os.getenv('WEBHOOK')
+replit = os.getenv('replit')
 webhook_url = os.getenv('WEBHOOK')
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
