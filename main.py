@@ -6,10 +6,8 @@ import time
 import random
 import os
 from flask import Flask
-from threading import Thread
 
 Debug = False
-#replit = os.getenv('replit')
 webhook_url = os.getenv('WEBHOOK')
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
@@ -209,31 +207,10 @@ s = requests.session()
 login_sso()
 sess_key = crawl_e_learning_link()
 crawl_data_courses(sess_key)
-while True:
-        recheck_data(sess_key)
-        time.sleep(1800)    # Recheck every 30 minutes
-'''
-if not replit:
-    while True:
-        recheck_data(sess_key)
-        time.sleep(1800)    # Recheck every 30 minutes
-else:
-    from flask import Flask
-    app = Flask('')
 
-    @app.route('/')
-    def main():
-        return "alive"
+app = Flask(__name__)
 
-    def run():
-        app.run(host="0.0.0.0", port=8080)
-
-    def keep_alive():
-        server = Thread(target=run)
-        server.start()
-
-    keep_alive()
-    while True:
-        recheck_data(sess_key)
-        time.sleep(1800)    # Recheck every 30 minutes
-'''
+@app.route('/')
+def main():
+    recheck_data(sess_key)
+    return 'Checking'
