@@ -22,7 +22,7 @@ Before running the script, make sure you have the following:
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKenKout%2Flms_notification%2F&env=WEBHOOK,USERNAME,PASSWORD)
 
 After deploying this script, make sure you do this:
-- https://{url}/get: Come to browser and enter this url until it returns : **Crawl Successfully**
+- https://your-domain.vercel.app/get: Come to browser and enter this url until it returns : **Crawl Successfully**
 
 ### Keeping the Script Running 24/7 with UptimeRobot
 
@@ -36,14 +36,16 @@ After deploying this script, make sure you do this:
   
   4. In the **Monitor Name** field, give your monitor a name (e.g., LMS Notification).
   
-  5. In the **URL (or IP)** field, paste the Vercel project URL and add **/recheck**. Example: your-domain.vercel.app/recheck
+  5. In the **URL (or IP)** field, paste the Vercel project URL and add **https://your-domain.vercel.app/recheck**. Example: your-domain.vercel.app/recheck
   
   6. Set the **Check Interval** to 5 minutes.
   
   7. Click **Create a Monitor**.
 
-  8. For example, if you have 21 course, create 3 monitors. Because each run it will check 10 links, so it need 3 monitors.
-  
+  8. For example, if you have 21 course, create 3 monitors. Because each run it will check 10 links, so it need 3 monitors. Ex: https://your-domain.vercel.app/recheck?1, https://your-domain.vercel.app/recheck?2, https://your-domain.vercel.app/recheck?3
+
+  9. Remember to add **https://your-domain.vercel.app/get** so if the program get interrupt, it will crawl the data again.
+
   Now, UptimeRobot will ping your Vercel project every 5 minutes, keeping it active.
   
 ## Setup
