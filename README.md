@@ -19,7 +19,10 @@ Before running the script, make sure you have the following:
 
 ## Setup on Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKenKout%2Flms_notification%2F&env=WEBHOOK,COOKIE,SESSION)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKenKout%2Flms_notification%2F&env=WEBHOOK,USERNAME,PASSWORD,COOKIE,SESSION)
+
+After deploying this script, make sure you do this:
+- https://{url}/get: Come to browser and enter this url until it returns : **Crawl Successfully**
 
 ### Keeping the Script Running 24/7 with UptimeRobot
 
