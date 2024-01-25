@@ -9,10 +9,13 @@ from flask import Flask
 
 Debug = False
 webhook_url = os.getenv('WEBHOOK')
-username = os.getenv('USERNAME')
-password = os.getenv('PASSWORD')
+cookie = os.getenv('COOKIE')
+sess_key = os.getenv('SESSION')
 course_link = []
 course_data = []
+
+headers = CaseInsensitiveDict()
+headers["Cookie"] = f"MoodleSession={cookie}"
 
 
 def login_sso():
@@ -28,11 +31,11 @@ def login_sso():
     print('Function - Login: Success')
 
 
-def crawl_e_learning_link():
+def crawl_e_learning_link(sess_key):
     global course_link
-    login = s.get('https://lms.hcmut.edu.vn/login/index.php?authCAS=CAS')
+    login = s.get('https://lms.hcmut.edu.vn/', headers = headers)
     if 'Error: Database connection failed' not in login.text:
-        sess_key = login.text.split('sesskey=')[1].split('"')[0]
+        #sess_key = login.text.split('sesskey=')[1].split('"')[0]
         print(sess_key)
         get_course = s.post(
                 f'https://lms.hcmut.edu.vn/lib/ajax/service.php?sesskey={sess_key}&info=core_course_get_enrolled_courses_by_timeline_classification',
@@ -48,7 +51,7 @@ def crawl_e_learning_link():
                                 "customfieldname": "",
                                 "customfieldvalue": ""
                         }
-                }])
+                }],headers=headers)
         #print(get_course.text)
         if get_course.json()[0]['error'] == False:
             for course in get_course.json()[0]['data']['courses']:
@@ -65,7 +68,7 @@ def crawl_data_courses(sess_key):
     for link in course_link:
         #data = s.get(link).text.replace(" ", "").replace("\n", "")
         data = BeautifulSoup(
-                s.get(link).text,
+                s.get(link, headers=headers).text,
                 'html.parser').select_one('ul.topics[data-for="course_sectionlist"]')
         #print(data.prettify())
         json = {'id': link.split('id=')[1], 'data': data}
@@ -182,7 +185,7 @@ def recheck_data(sess_key):
         link = 'https://lms.hcmut.edu.vn/course/view.php?id=' + course_data[i]['id']
         #data = s.get(link).text.replace(" ", "").replace("\n", "")
         data = BeautifulSoup(
-                s.get(link).text,
+                s.get(link, headers=headers).text,
                 'html.parser').select_one('ul.topics[data-for="course_sectionlist"]')
         json = {'id': link.split('id=')[1], 'data': data}
         if str(data) not in str(course_data[i]['data']):
@@ -204,9 +207,8 @@ def recheck_data(sess_key):
 
 
 s = requests.session()
-login_sso()
-sess_key = crawl_e_learning_link()
-crawl_data_courses(sess_key)
+crawl_e_learning_link(sess_key)
+#crawl_data_courses(sess_key)
 
 app = Flask(__name__)
 
