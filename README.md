@@ -17,25 +17,10 @@ Before running the script, make sure you have the following:
 - Python installed
 - Required Python packages installed (`requests`, `beautifulsoup4`, `Flask`)
 
-## Setup on Replit
+## Setup on Vercel
 
-1. Fork this on Replit [repository](https://replit.com/@kenhcmut/lmsnotification).
-   
-2. Set up environment variables:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKenKout%2Flms_notification%2F&env=WEBHOOK,USERNAME,PASSWORD)
 
-   - Click on the **Lock icon(Secrets)** on the left sidebar.
-   - Click on **Environment Variables**.
-   - Add the following variables:
-     - `WEBHOOK`: Discord webhook URL for notifications.
-     - `USERNAME`: Your LMS username.
-     - `PASSWORD`: Your LMS password.
-     - `replit`: true
-
-3. Run the script:
-
-   - Open the `main.py` file.
-   - Click the green "Run" button at the top.
-  
 ### Keeping the Script Running 24/7 with UptimeRobot
 
   To ensure the script runs continuously, follow these steps:
@@ -48,7 +33,7 @@ Before running the script, make sure you have the following:
   
   4. In the **Monitor Name** field, give your monitor a name (e.g., LMS Notification).
   
-  5. In the **URL (or IP)** field, paste the Replit project URL. You can find this URL by clicking on the "Run" button and copying the link.
+  5. In the **URL (or IP)** field, paste the Vercel project URL. You can find this URL by clicking on the "Run" button and copying the link.
   
   6. Set the **Check Interval** to 5 minutes.
   
@@ -61,7 +46,7 @@ Before running the script, make sure you have the following:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/e-learning-notification-script.git
+   git clone https://github.com/KenKout/lms_notification
    ```
 
 2. Install the required packages:
@@ -87,7 +72,6 @@ Before running the script, make sure you have the following:
 You can customize the following parameters in the script:
 
 - `Debug`: Set to `True` for additional debug information.
-- `time.sleep(1800)`: Recheck interval (in seconds).
 
 ## Notes
 
