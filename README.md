@@ -41,8 +41,10 @@ After deploying this script, make sure you do this:
   6. Set the **Check Interval** to 5 minutes.
   
   7. Click **Create a Monitor**.
+
+  8. For example, if you have 21 course, create 3 monitors. Because each run it will check 10 links, so it need 3 monitors.
   
-  Now, UptimeRobot will ping your Replit project every 5 minutes, keeping it active.
+  Now, UptimeRobot will ping your Vercel project every 5 minutes, keeping it active.
   
 ## Setup
 
