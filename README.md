@@ -36,7 +36,7 @@ After deploying this script, make sure you do this:
   
   4. In the **Monitor Name** field, give your monitor a name (e.g., LMS Notification).
   
-  5. In the **URL (or IP)** field, paste the Vercel project URL. You can find this URL by clicking on the "Run" button and copying the link.
+  5. In the **URL (or IP)** field, paste the Vercel project URL and add **/recheck**. Example: your-domain.vercel.app/recheck
   
   6. Set the **Check Interval** to 5 minutes.
   
