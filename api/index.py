@@ -11,8 +11,8 @@ Debug = False
 webhook_url = os.getenv('WEBHOOK')
 username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
-cookie = os.getenv('COOKIE')
-sess_key = os.getenv('SESSION')
+cookie = os.getenv('COOKIE','')
+sess_key = os.getenv('SESSION','')
 course_link = []
 course_data = []
 
@@ -35,6 +35,7 @@ def login_sso():
     print(resp2.text)
     if 'Log In Successful' in resp2.text:
         print('Function - Login: Success')
+        send_notification_discord({"data":{"title":"Login Successfully","url":""}})
         return True
     else:
         headers["Cookie"] = f"MoodleSession={cookie}"
@@ -45,8 +46,10 @@ def crawl_e_learning_link(sess_key=sess_key):
     global course_link
     login = s.get('https://lms.hcmut.edu.vn/login/index.php?authCAS=CAS', headers=headers)
     if 'Error: Database connection failed' not in login.text:
-        try:sess_key = login.text.split('sesskey=')[1].split('"')[0]
-        except:return 'Wrong Password'
+        try:
+            sess_key = login.text.split('sesskey=')[1].split('"')[0]
+        except:
+            return 'Wrong Password'
         print(sess_key)
         get_course = s.post(
             f'https://lms.hcmut.edu.vn/lib/ajax/service.php?sesskey={sess_key}&info=core_course_get_enrolled_courses_by_timeline_classification',
@@ -77,15 +80,15 @@ def crawl_e_learning_link(sess_key=sess_key):
 def crawl_data_courses(sess_key):
     global course_data
     if not current_course_processing['isDone']:
-        if current_course_processing['current'] + 10 >= len(course_link):
+        if current_course_processing['current'] + 5 >= len(course_link):
             end_range = len(course_link)
             start_range = current_course_processing['current']
-            
+
             current_course_processing['current'] = len(course_link)
             current_course_processing['isDone'] = True
         else:
             start_range = current_course_processing['current']
-            end_range = current_course_processing['current'] + 10
+            end_range = current_course_processing['current'] + 5
         for i in range(start_range, end_range):
             link = course_link[i]
             data = BeautifulSoup(
@@ -95,7 +98,7 @@ def crawl_data_courses(sess_key):
             json = {'id': link.split('id=')[1], 'data': data}
             course_data.append(json)
         if not current_course_processing['isDone']:
-            current_course_processing['current'] += 10
+            current_course_processing['current'] += 5
         else:
             print(json)
         total = len(course_link)
@@ -210,15 +213,17 @@ def send_notification_discord(item):
 def recheck_data(sess_key):
     global course_data
     global current_crawl_processing
+    if len(course_data) == 0:
+        send_notification_discord({"data":{"title":"Please reload data by using your-domain.vercel.app/get","url":""}})
     if not current_crawl_processing['isDone']:
-        if current_crawl_processing['current'] + 10 >= len(course_link):
+        if current_crawl_processing['current'] + 5 >= len(course_data):
             end_range = len(course_data)
             start_range = current_crawl_processing['current']
             current_crawl_processing['current'] = len(course_data)
             current_crawl_processing['isDone'] = True
         else:
             start_range = current_crawl_processing['current']
-            end_range = current_crawl_processing['current'] + 10
+            end_range = current_crawl_processing['current'] + 5
         for i in range(start_range, end_range):
             link = 'https://lms.hcmut.edu.vn/course/view.php?id=' + course_data[i]['id']
             data = BeautifulSoup(
@@ -242,14 +247,14 @@ def recheck_data(sess_key):
                         time.sleep(2)
                 print('Data already exists')
         if not current_crawl_processing['isDone']:
-            current_crawl_processing['current'] += 10
+            current_crawl_processing['current'] += 5
         total = len(course_data)
         current = current_crawl_processing['current']
         return f'{current}/{total}'
     else:
         current_crawl_processing['current'] = 0
         current_crawl_processing['isDone'] = False
-        end_range = current_crawl_processing['current'] + 10
+        end_range = current_crawl_processing['current'] + 5
         for i in range(current_crawl_processing['current'], end_range):
             link = 'https://lms.hcmut.edu.vn/course/view.php?id=' + course_data[i]['id']
             data = BeautifulSoup(
@@ -272,10 +277,11 @@ def recheck_data(sess_key):
                         send_notification_discord(result)
                         time.sleep(2)
                 print('Data already exists')
-        current_crawl_processing['current'] += 10
+        current_crawl_processing['current'] += 5
         total = len(course_data)
         current = current_crawl_processing['current']
         return f'{current}/{total}'
+
 
 s = requests.session()
 login = login_sso()
@@ -285,6 +291,7 @@ else:
     crawl_e_learning_link(sess_key)
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def main():
